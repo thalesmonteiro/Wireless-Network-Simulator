@@ -1,5 +1,5 @@
 from camadaFisica import CamadaFisica
-from lists import  proximoAEnviar, indicesParaEnvio
+from listas import  *
 from pacote import Pacote 
 from cabecalhos import Cabecalho
 from random import randint

@@ -1,6 +1,6 @@
 from camadaFisica import CamadaFisica
 from camadaEnlace import CamadaEnlace
-from lists import indicesParaEnvio
+from listas import *
 from pacote import Pacote
 from cabecalhos import Cabecalho
 from rota import Rota

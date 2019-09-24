@@ -1,19 +1,18 @@
 from no import No
-from lists import nos
-from lists import indicesParaEnvio, indicesParaVer, proximoAEnviar
+from listas import *
 from pacote import Pacote 
 from camadaRede import CamadaRede
 import random
 from graficos  import criaGraficos 
 from constantes import *
 
-
-Lucas = No(0, 2, 0, 0, 10)
+#No(id, cobertura, x, y, bateria)
+Lucas = No(0, 2, 0, 0, 40)
 Thales = No(1, 2, 1, 0, 10)
 Joao = No(2, 2, 2, 1, 10)
 Pessoa = No(3, 2, 3, 0, 10)
 Danielle = No(4, 2, 4, 0, 10)
-Luciano = No(5, 4, 5, 3, 10)
+Luciano = No(5, 2, 5, 3, 10)
 
 id = []
 x = []
