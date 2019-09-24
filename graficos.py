@@ -17,6 +17,7 @@ def criaGraficos(id, x, y, cobertura):
     #plt.xlim(-10, 10)
 
     fig.savefig('./plotcircles.png')
+    plt.show()
 
 
 if __name__ == "__main__":

@@ -7,12 +7,12 @@ from graficos  import criaGraficos
 from constantes import *
 
 #No(id, cobertura, x, y, bateria)
-Lucas = No(0, 2, 0, 0, 40)
-Thales = No(1, 2, 1, 0, 10)
-Joao = No(2, 2, 2, 1, 10)
-Pessoa = No(3, 2, 3, 0, 10)
-Danielle = No(4, 2, 4, 0, 10)
-Luciano = No(5, 2, 5, 3, 10)
+Lucas = No(0, 1, 0, 0, 100)
+Thales = No(1, 2, 2, 0, 100)
+Joao = No(2, 2, 3, 2, 100)
+Pessoa = No(3, 2, 3, 0, 100)
+Danielle = No(4, 1, 5, 1, 100)
+Luciano = No(5, 2, 5, 3, 100)
 
 id = []
 x = []

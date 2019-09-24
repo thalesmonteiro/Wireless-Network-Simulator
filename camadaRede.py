@@ -23,9 +23,9 @@ class CamadaRede:
         cabecalho = Cabecalho("REDE", self._camadaEnlace._camadaFisica._id, macDestino, -1, 1, -1, sequencia)
         pacote = Pacote(rota, 1)
         pacote.addCabecalho(cabecalho)
-        msg = "Enviando um RREP com destino para"
+        msg = "Enviando um RREP com destino para ID:"
         #exibe pacote criado
-        self.exibePacote(msg,  self._camadaEnlace._camadaFisica._id, macDestino)
+        self.exibePacote(msg,  self._camadaEnlace._camadaFisica._id, macDestino, cabecalho._sequenNum)
         #Define a rota requisitada
         for indice,mac in enumerate(cabecalho._sequenList):
             if(mac == self._camadaEnlace._camadaFisica._id):       
@@ -42,15 +42,15 @@ class CamadaRede:
         # add o proprio endereço da camada fisica no pacote 
         sequencia.append(self._camadaEnlace._camadaFisica._id)
         # numero do pacote
-        sequenNum = random.randint(1,128733788) 
+        sequenNum = random.randint(1,4412349) 
         self._listaRREQS.append(sequenNum)
         #Cria um pacote e inseri o cabeçalho da camada de rede
         cabecalho = Cabecalho("REDE", self._camadaEnlace._camadaFisica._id, macDestino, -1, 0, sequenNum, sequencia)
         pacote = Pacote("", 1)
         pacote.addCabecalho(cabecalho)
-        msg = "Enviando um RREQ "
+        msg = "Enviando um RREQ"
         #exibe pacote criado
-        self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, None)
+        self.exibePacote(msg, self._camadaEnlace._camadaFisica._id,macDestino, sequenNum) #TROQUEI CABEÇALHO._SEQUENNUM por sequenNUM
         #add a camada de enlace o pacote
         self._camadaEnlace.addPacote(pacote, -1)
         
@@ -63,16 +63,16 @@ class CamadaRede:
             pacote = self._camadaEnlace._pacotesLidos.pop(0)
             cabecalho = pacote.getCabecalhoRede()
             #Se o pacote for recebido for de dados
-            if(cabecalho._requesicao == -1):
+            if(cabecalho._requisicao == -1):
                 #Verifica se o pacote é para aquele no
                 if(cabecalho._macDestino == self._camadaEnlace._camadaFisica._id):
                     msg = "Pacote de dados"
-                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, pacote._dados)
+                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, pacote._dados, cabecalho._sequenNum)
                 else:
                     msg = "Chegada de pacote de dados mas não é pra mim "
-                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, 0)
+                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino, cabecalho._sequenNum)
                     msg_2 = "Enviando pacote de dados para o nó seguinte"
-                    self.exibePacote(msg_2, self._camadaEnlace._camadaFisica._id, 0)
+                    self.exibePacote(msg_2, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino,cabecalho._sequenNum) #!!!!!!
                     for indice,mac in enumerate(pacote._cabecalhos[0]._sequenList):
                         if(mac == self._camadaEnlace._camadaFisica._id):
                             proximoDestino = cabecalho._sequenList[indice-1]
@@ -82,9 +82,9 @@ class CamadaRede:
                     indicesParaEnvio.append(self._camadaEnlace._camadaFisica._id)
 
             #Se o pacote for recebido for um RREQ
-            elif(cabecalho._requesicao == 0):
+            elif(cabecalho._requisicao == 0):
                 msg = "Chegada de pacote RREQ"
-                self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._sequenNum)
+                self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino, cabecalho._sequenNum)
                 #Verifica se esse RREQ já foi recebido pelo nó
                 if(not cabecalho._sequenNum in self._listaRREQS):
                     self._listaRREQS.append(cabecalho._sequenNum)
@@ -93,14 +93,13 @@ class CamadaRede:
                     #Verifica se o RREQ é para o nó
                     if(cabecalho._macDestino == self._camadaEnlace._camadaFisica._id):
                         msg = "Eu sou o destino do RREQ"
-                        self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, 0)
+                        self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino, cabecalho._sequenNum)
                         rota = cabecalho._sequenList
                         macDestino = rota[0]
                         sequenParaFonte = rota 
                         sequenParaFonte.reverse()
                         self.enviaRREP(macDestino,sequenParaFonte, rota)
                         indicesParaEnvio.append(self._camadaEnlace._camadaFisica._id)
-
                     else:
                         print("ID:", self._camadaEnlace._camadaFisica._id, "Eu não sou o destino do RREQ")
                         self._camadaEnlace.addPacote(pacote, -1)
@@ -108,18 +107,18 @@ class CamadaRede:
                 
                 else:
                     msg = "Ja tenho esse RREQ"
-                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._sequenNum)
+                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino ,cabecalho._sequenNum)
             #Se o pacote for recebido for um RREP
-            elif(cabecalho._requesicao == 1):
+            elif(cabecalho._requisicao == 1):
                 destino = cabecalho._macDestino
                 msg = "Chegada de pacote RREP: "
-                self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._sequenList)
+                self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino, cabecalho._sequenList)
                 #Verifica se o RREP é para o nó
                 if(destino == self._camadaEnlace._camadaFisica._id):
                     msg = "Eu sou o destino do RREP"
-                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, 0)
+                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino,  cabecalho._sequenNum)
                     msg_2 = "Enviando dados"
-                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, 0)
+                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino, cabecalho._sequenNum)
                     sequenParaFonte = pacote._dados
                     rota = Rota(cabecalho._sequenList[0],sequenParaFonte)
                     self._rotas.append(rota)
@@ -127,7 +126,7 @@ class CamadaRede:
 
                 else:
                     msg = "Eu não sou o destino do RREP"
-                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, 0)
+                    self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, cabecalho._macDestino,  cabecalho._sequenNum)
                     for indice,mac in enumerate(cabecalho._sequenList):
                         if(mac == self._camadaEnlace._camadaFisica._id):
                             proximoDestino = cabecalho._sequenList[indice+1]
@@ -172,7 +171,6 @@ class CamadaRede:
                 indicesParaEnvio.append(self._camadaEnlace._camadaFisica._id)
 
             elif(not cabecalho._macDestino in self._ListasRotasEspera):
-
                 self._ListasRotasEspera.append(pacote._cabecalhos[0]._macDestino)
                 self.enviaRREQ(pacote._cabecalhos[0]._macDestino)
 
@@ -180,9 +178,19 @@ class CamadaRede:
         #Chama a função de enviar pacotes da camada de enlace
         self._camadaEnlace.enviaPacote()
         
-    def exibePacote(self, mensagem,  id, macDestino):
+    def exibePacote(self, mensagem,  id, macDestino, NumSequencia):
         if(mensagem == "Pacote de dados"):
             print(GREEN, "\nID:", id, "Mensagem:", macDestino, RESET)
+        elif(mensagem == "Enviando um RREQ"):
+            print("ID:", macDestino, mensagem,"para ID:" ,id, "com NumSequencia:", NumSequencia)
+        elif(mensagem == "Chegada de pacote RREQ"):
+            print("ID:",macDestino, mensagem, "com:", NumSequencia)
+        elif(mensagem == "Eu sou o destino do RREQ"):
+            print(GREEN, "\rID:", id, mensagem, RESET)
+        elif(mensagem == "Ja tenho esse RREQ"):
+            print("ID:", id, mensagem)
+        elif(mensagem == "Enviando um RREP com destino para ID:"):
+            print("ID:",macDestino, mensagem, id)
         else:
-            print("\nID:", id, mensagem, "MacDestino:", macDestino)
+            print("ID:", id, mensagem, "MacDestino", macDestino)
         
