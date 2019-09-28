@@ -42,8 +42,7 @@ for i in range(100):
                 print(RED, "Nó com ID: {} possui bateria descarregada.".format(
                     no._id), RESET)
                 nos.remove(no)
-                print(RED, "Nó com ID: ",
-                      no._id, "foi morto.", RESET)
+                print(RED, "Nó com ID: {} foi morto.".format(no._id), RESET)
         except:
             continue
 

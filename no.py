@@ -30,6 +30,6 @@ class No:
               mensagem, " Destino:", macDestino)
 
     # Deleta o nó quando a bateria acabar
-    def __del__(self):
-        print(RED, "Destrutor da classe Nó:\n Nó com ID:", self._id, "morreu com",
-              self._camadaRede._camadaEnlace._camadaFisica._bateria, "de bateria.", RESET)
+    # def __del__(self):
+    #    print(RED, "Destrutor da classe Nó:\n Nó com ID:", self._id, "morreu com",
+    #          self._camadaRede._camadaEnlace._camadaFisica._bateria, "de bateria.", RESET)
