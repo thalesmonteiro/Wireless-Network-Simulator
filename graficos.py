@@ -5,9 +5,12 @@ def criaGraficos(id, x, y, cobertura):
     fig, ax = plt.subplots(1, 1)
 
     for idi, xi, yi, coberturai in zip(id, x, y, cobertura):
+
+        area = 9900*(coberturai**2)
+
         ax.scatter(xi, yi, color="r")
-        ax.scatter(xi, yi, s=13950*coberturai, alpha=0.2, color="r")
-        ax.annotate("%s" % idi, xy=(xi, yi))
+        ax.scatter(xi, yi, s=area, alpha=0.2, color="r")
+        ax.annotate("%s\n%s" % (coberturai, idi), xy=(xi, yi))
 
     ax.grid()
     ax.set_aspect("equal")
