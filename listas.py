@@ -1,5 +1,5 @@
 nos = []
 pacotes = []
 indicesParaEnvio = []
-indicesParaVer = []
+indicesParaReceber = []
 proximoAEnviar = []

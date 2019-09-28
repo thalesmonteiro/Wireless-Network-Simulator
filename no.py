@@ -17,7 +17,7 @@ class No:
     # Criar pacote
 
     def criarPacote(self, duracao, macDestino, mensagem):
-        if(self._camadaRede._camadaEnlace._camadaFisica._bateria == 0):
+        if(self._camadaRede._camadaEnlace._camadaFisica._bateria <= 0):
             print(RED, "\nID:", self._id,
                   "Bateria descarregada, impossibilitado de criar pacote.", RESET)
         self._camadaRede.addPacote(macDestino, mensagem, duracao)
@@ -31,5 +31,5 @@ class No:
 
     # Deleta o nó quando a bateria acabar
     def __del__(self):
-        print(RED, "Nó com ID:", self._id, "morreu com",
+        print(RED, "Destrutor da classe Nó:\n Nó com ID:", self._id, "morreu com",
               self._camadaRede._camadaEnlace._camadaFisica._bateria, "de bateria.", RESET)

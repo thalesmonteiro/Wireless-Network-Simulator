@@ -19,7 +19,7 @@ class CamadaFisica:
 
     # Descobre nós vizihos e add na lista
     def encontraVizinhos(self):
-        if(self._bateria == 0):
+        if(self._bateria <= 0):
             print(RED, "\nID:", self._id,
                   "Bateria descarregada, impossibilitado de encontrar vizinhos", RESET)
         else:
@@ -34,44 +34,44 @@ class CamadaFisica:
 
     # Recebe pacote
     def recebePacote(self, pacote):
-        if(self._bateria == 0):
+        if(self._bateria <= 0):
             print(RED, "\nID:", self._id,
                   "Bateria descarregada, impossibilitado de receber pacote", RESET)
             '''
             del nos[:]
             del indicesParaEnvio[:]
-            del indicesParaVer[:]
+            del indicesParaReceber[:]
             for no in nos:
                 if(no._id == self._id):
                     nos.remove(no)
                     if(len(indicesParaEnvio) != 0):
                         print(indicesParaEnvio.pop())
-                    elif(len(indicesParaVer) != 0):
-                        print(indicesParaVer.pop())
+                    elif(len(indicesParaReceber) != 0):
+                        print(indicesParaReceber.pop())
             '''
         else:
             # Add a lista global
-            indicesParaVer.append(self._id)
+            indicesParaReceber.append(self._id)
             # Add a lista local de recebidos
             self._pacotesRecebidos.append(pacote)
             self._bateria -= 1
 
     # Envia pacote
     def enviaPacote(self):
-        if(self._bateria == 0):
+        if(self._bateria <= 0):
             print(RED, "\nID:", self._id,
                   "Bateria descarregada, impossibilitado de enviar pacote", RESET)
             '''
             del nos[:]
+            del indicesParaReceber[:]
             del indicesParaEnvio[:]
-            del indicesParaVer[:]
             for no in nos:
                 if(no._id == self._id):
                     nos.remove(no)
                     if(len(indicesParaEnvio) != 0):
                         print(indicesParaEnvio.pop())
-                    elif(len(indicesParaVer) != 0):
-                        print(indicesParaVer.pop())
+                    elif(len(indicesParaReceber) != 0):
+                        print(indicesParaReceber.pop())
             '''
         else:
             # Encontra e add os vizinhos na lista

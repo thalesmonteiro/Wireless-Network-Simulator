@@ -34,7 +34,21 @@ for i in range(100):
     print("\n", BLUE, "Tempo: ", i, RESET, end="\n\n", )
 
     # Loop para percorrer
-    for no in nos:
+    # for no in nos:
+    for i in range(len(nos)):
+        try:
+            no = nos[i]
+            if(no._camadaRede._camadaEnlace._camadaFisica._bateria <= 0):
+                print(RED, "Nó com ID: {} possui bateria descarregada.".format(
+                    no._id), RESET)
+                nos.remove(no)
+                print(RED, "Nó com ID: ",
+                      no._id, "foi morto.", RESET)
+        except:
+            continue
+
+        print(CYAN, "Nó com ID: {} possui bateria {} carregada".format(no._id,
+                                                                       no._camadaRede._camadaEnlace._camadaFisica._bateria), RESET)
 
         # Numero aleatorio entre 0 e 100 para probabilidade de criação de pacotes
         rand = random.randint(0, 100)
@@ -56,11 +70,20 @@ for i in range(100):
     del proximoAEnviar[:]
 
     # Existe algum nó querendo receber, recebe
-    for j in indicesParaVer:
-        nos[j]._camadaRede.recebePacote()
-    del indicesParaVer[:]
+    for j in indicesParaReceber:
+        try:
+            nos[j]._camadaRede.recebePacote()
+        except:
+            print(RED, "Nó não existe mais para poder receber.", RESET)
+            continue
+        # if(nos[j]._camadaRede._camadaEnlace._camadaFisica._bateria <= 0):
+    del indicesParaReceber[:]
 
     # Existe algum nó querendo transmitir, transmite naquele instante se posssível
     for i in indicesParaEnvio:
-        nos[i]._camadaRede.enviaPacote()
+        try:
+            nos[i]._camadaRede.enviaPacote()
+        except:
+            print(RED, "Nó não existe mais para poder transmitir.", RESET)
+            continue
     del indicesParaEnvio[:]
