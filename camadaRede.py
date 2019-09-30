@@ -8,7 +8,6 @@ import random
 from constantes import *
 
 class CamadaRede:
-
     def __init__(self, camadaEnlace):
         self._camadaEnlace = camadaEnlace
         self._listaPacotes = []
@@ -16,30 +15,11 @@ class CamadaRede:
         self._ListasRotasEspera = []
         self._rotas = []
 
-
-    #Envia pacote de resposta de rota (pacote de controle)
-    def enviaRREP(self, macDestino, sequencia, rota): 
-        #Cria um pacote e inseri o cabeçalho da camada de rede
-        cabecalho = Cabecalho("REDE", self._camadaEnlace._camadaFisica._id, macDestino, -1, 1, -1, sequencia)
-        pacote = Pacote(rota, 1)
-        pacote.addCabecalho(cabecalho)
-        msg = "Enviando um RREP com destino para ID:"
-        #exibe pacote criado
-        self.exibePacote(msg,  self._camadaEnlace._camadaFisica._id, macDestino, cabecalho._sequenNum)
-        #Define a rota requisitada
-        for indice,mac in enumerate(cabecalho._sequenList):
-            if(mac == self._camadaEnlace._camadaFisica._id):       
-                proximoDestino = cabecalho._sequenList[indice+1]
-                proximoPacote = pacote
-                self._camadaEnlace.addPacote(proximoPacote, proximoDestino)
-                break
-       
-
-    #Manda o pacote de requisição de rota
+    #Inicia o processo de descoberta de rota
     def enviaRREQ(self, macDestino):
         #Inicializa uma sequencia e coloca o seu ID como primeiro
-        sequencia = []
         # add o proprio endereço da camada fisica no pacote 
+        sequencia = []
         sequencia.append(self._camadaEnlace._camadaFisica._id)
         # numero do pacote
         sequenNum = random.randint(1,4412349) 
@@ -50,9 +30,26 @@ class CamadaRede:
         pacote.addCabecalho(cabecalho)
         msg = "Enviando um RREQ"
         #exibe pacote criado
-        self.exibePacote(msg, self._camadaEnlace._camadaFisica._id,macDestino, sequenNum) #TROQUEI CABEÇALHO._SEQUENNUM por sequenNUM
+        self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, macDestino, sequenNum) #TROQUEI CABEÇALHO._SEQUENNUM por sequenNUM
         #add a camada de enlace o pacote
         self._camadaEnlace.addPacote(pacote, -1)
+
+    #Envia pacote de resposta de rota (pacote de controle)
+    def enviaRREP(self, macDestino, sequencia, rota): 
+        #Cria um pacote e inseri o cabeçalho da camada de rede
+        cabecalho = Cabecalho("REDE", self._camadaEnlace._camadaFisica._id, macDestino, -1, 1, -1, sequencia)
+        pacote = Pacote(rota, 1)
+        pacote.addCabecalho(cabecalho)
+        msg = "Enviando um RREP com destino para ID:"
+        #exibe pacote criado
+        self.exibePacote(msg, self._camadaEnlace._camadaFisica._id, macDestino, rota)
+        #Define a rota requisitada
+        for indice,mac in enumerate(cabecalho._sequenList):
+            if(mac == self._camadaEnlace._camadaFisica._id):       
+                proximoDestino = cabecalho._sequenList[indice+1]
+                proximoPacote = pacote
+                self._camadaEnlace.addPacote(proximoPacote, proximoDestino)
+                break
         
     #Recebe e trata o pacote recebido na camada de rede
     def recebePacote(self):
@@ -182,15 +179,15 @@ class CamadaRede:
         if(mensagem == "Pacote de dados"):
             print(GREEN, "\nID:", id, "Mensagem:", macDestino, RESET)
         elif(mensagem == "Enviando um RREQ"):
-            print("ID:", macDestino, mensagem,"para ID:" ,id, "com NumSequencia:", NumSequencia)
+            print("ID:", id, mensagem,"para ID:" ,macDestino, "com NumSequencia:", NumSequencia)
         elif(mensagem == "Chegada de pacote RREQ"):
-            print("ID:",macDestino, mensagem, "com:", NumSequencia)
+            print("ID:",id, mensagem, "com:", NumSequencia)
         elif(mensagem == "Eu sou o destino do RREQ"):
             print(GREEN, "\rID:", id, mensagem, RESET)
         elif(mensagem == "Ja tenho esse RREQ"):
             print("ID:", id, mensagem)
         elif(mensagem == "Enviando um RREP com destino para ID:"):
-            print("ID:",macDestino, mensagem, id)
+            print("ID:",id, mensagem, macDestino, rota) #ARRUMAR
         else:
             print("ID:", id, mensagem, "MacDestino", macDestino)
         

@@ -25,7 +25,7 @@ class No:
             self._camadaRede._camadaEnlace._camadaFisica._id, macDestino, mensagem)
 
     # Exibe pacote criado
-    def exibePacote(self, macDestino, id, mensagem):
+    def exibePacote(self, id, macDestino, mensagem):
         print("Pacote criado \nID:", id, "Mensagem: ",
               mensagem, " Destino:", macDestino)
 
