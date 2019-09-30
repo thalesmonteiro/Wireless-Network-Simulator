@@ -1,5 +1,0 @@
-nos = []
-pacotes = []
-indicesParaEnvio = []
-indicesParaReceber = []
-proximoAEnviar = []

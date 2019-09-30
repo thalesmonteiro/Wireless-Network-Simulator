@@ -4,16 +4,17 @@ from constantes import *
 import math as math
 
 
-#Verifica se um nó alcança outro
+# Verifica se um nó alcança outro
 def alcance(centroX, centroY, raio, x, y):
-    #calculo de distância usando a fórmula de distância entre dois pontos
+    # calculo de distância usando a fórmula de distância euclideana
     distancia = math.sqrt((centroX - x) ** 2 + (centroY - y) ** 2)
-    #se alcancar retorna verdadeiro
+    # se alcancar retorna verdadeiro
     if(distancia <= raio):
         return True
-    #caso contrario retorna falso
+    # caso contrario retorna falso
     else:
-        return False 
+        return False
+
 
 class CamadaFisica:
 
@@ -45,53 +46,21 @@ class CamadaFisica:
 
     # Recebe pacote
     def recebePacote(self, pacote):
-        if(self._bateria <= 0):
-            print(RED, "\nID:", self._id,
-                  "Bateria descarregada, impossibilitado de receber pacote", RESET)
-            '''
-            del nos[:]
-            del indicesParaEnvio[:]
-            del indicesParaReceber[:]
-            for no in nos:
-                if(no._id == self._id):
-                    nos.remove(no)
-                    if(len(indicesParaEnvio) != 0):
-                        print(indicesParaEnvio.pop())
-                    elif(len(indicesParaReceber) != 0):
-                        print(indicesParaReceber.pop())
-            '''
-        else:
-            # Add a lista global
-            indicesParaReceber.append(self._id)
-            # Add a lista local de recebidos
-            self._pacotesRecebidos.append(pacote)
-            self._bateria -= 1
+        # Add a lista global
+        indicesParaReceber.append(self._id)
+        # Add a lista local de recebidos
+        self._pacotesRecebidos.append(pacote)
+        self._bateria -= 1
 
     # Envia pacote
     def enviaPacote(self):
-        if(self._bateria <= 0):
-            print(RED, "\nID:", self._id,
-                  "Bateria descarregada, impossibilitado de enviar pacote", RESET)
-            '''
-            del nos[:]
-            del indicesParaReceber[:]
-            del indicesParaEnvio[:]
-            for no in nos:
-                if(no._id == self._id):
-                    nos.remove(no)
-                    if(len(indicesParaEnvio) != 0):
-                        print(indicesParaEnvio.pop())
-                    elif(len(indicesParaReceber) != 0):
-                        print(indicesParaReceber.pop())
-            '''
-        else:
-            # Encontra e add os vizinhos na lista
-            self.encontraVizinhos()
-            # Percorre vizinhos
-            for no in self._vizinhos:
-                # Envia pacote aos vizinhos
-                no._camadaRede._camadaEnlace._camadaFisica.recebePacote(
-                    self._pacotesEnviados[0])
-            # Add o pacote na lista de salvos
-            self._pacotesSalvos.append(self._pacotesEnviados.pop(0))
-            self._bateria -= 1
+        # Encontra e add os vizinhos na lista
+        self.encontraVizinhos()
+        # Percorre vizinhos
+        for no in self._vizinhos:
+            # Envia pacote aos vizinhos
+            no._camadaRede._camadaEnlace._camadaFisica.recebePacote(
+                self._pacotesEnviados[0])
+        # Add o pacote na lista de salvos
+        self._pacotesSalvos.append(self._pacotesEnviados.pop(0))
+        self._bateria -= 1
