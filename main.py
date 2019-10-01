@@ -63,14 +63,12 @@ def main_rand():
 
             # Teste se rand é menor que 6
             if(rand < 6):
-                # if(numPac == True):
                 # Se o ID do destino for diferente do dele mesmo, adiciona o pacote no host
                 if(enviar != (no._camadaRede._camadaEnlace._camadaFisica._id)):
                     duracao = 1
                     no.criarPacote(duracao, enviar, mensagem)
                     indicesParaEnvio.append(
                         no._camadaRede._camadaEnlace._camadaFisica._id)
-                    # numPac = False
 
         if(proximoAEnviar != []):
             for i in proximoAEnviar:
@@ -109,7 +107,7 @@ def main():
 
         # Se o tempo for igual a 25, o nó 2 morre
         if (tempo == 25):
-            nos[2]._camadaRede._camadaEnlace._camadaFisica._bateria = 0
+            #nos[2]._camadaRede._camadaEnlace._camadaFisica._bateria = 0
             numPac = 0
 
         # Loop para percorrer

@@ -42,6 +42,8 @@ class CamadaFisica:
                     if(no not in self._vizinhos):
                         # add a lista de vizinhos
                         self._vizinhos.append(no)
+            print("ID:", self._id, "Vizinhos: ", [
+                  no._camadaRede._camadaEnlace._camadaFisica._id for no in self._vizinhos])
             self._bateria -= 1
 
     # Recebe pacote
